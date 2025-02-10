@@ -76,9 +76,17 @@ async def send_otp(client, message):
     await client_obj.connect()
 
     try:
-        code = await client_obj.send_code_request(phone_number) if is_telethon else await client_obj.send_code(phone_number)
+        if is_telethon:
+            code = await client_obj.send_code_request(phone_number)
+        else:
+            code = await client_obj.send_code(phone_number)
+
+        print(f"DEBUG: OTP Code Response = {code}")  # Debugging Line
+
         session["client_obj"] = client_obj
+        session["code"] = code  # FIX: अब session में code स्टोर हो रहा है
         session["stage"] = "otp"
+
         await message.reply("Enter the OTP you received:")
     except (ApiIdInvalid, ApiIdInvalidError, PhoneNumberInvalid, PhoneNumberInvalidError):
         await message.reply("Invalid API ID or Phone Number. Please restart the process.")
