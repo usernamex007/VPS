@@ -1,4 +1,5 @@
 asyncio
 telethon
 pyrogram
+tgcrypto
 requests
